@@ -11,6 +11,7 @@ import 'mock_collection_reference.dart';
 import 'mock_document_reference.dart';
 import 'mock_field_value_factory_platform.dart';
 import 'mock_write_batch.dart';
+import 'query_snapshot_stream_manager.dart';
 import 'util.dart';
 
 const allowAllDescription = '''service cloud.firestore {
@@ -128,6 +129,15 @@ class FakeFirebaseFirestore implements FirebaseFirestore {
     final encoder = JsonEncoder.withIndent('  ', myEncode);
     final jsonText = encoder.convert(copy);
     return jsonText;
+  }
+
+  /// Clear the whole database
+  void clear() {
+    _root.clear();
+    _docsData.clear();
+    _snapshotStreamControllerRoot.clear();
+    _savedDocumentPaths.clear();
+    QuerySnapshotStreamManager().clear();
   }
 
   Future<void> maybeThrowSecurityException(String path, Method method) async {
